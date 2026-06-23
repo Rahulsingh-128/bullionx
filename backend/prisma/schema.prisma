@@ -30,14 +30,14 @@ enum TxStatus {
 }
 
 model User {
-  id           String     @id @default(uuid())
-  email        String     @unique
+  id           String    @id @default(uuid())
+  email        String    @unique
   passwordHash String
   fullName     String
   phone        String?
-  kycStatus    KYCStatus  @default(PENDING)
-  createdAt    DateTime   @default(now())
-  updatedAt    DateTime   @updatedAt
+  kycStatus    KYCStatus @default(PENDING)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
 
   wallet       Wallet?
   holdings     Holding[]
@@ -56,14 +56,16 @@ model Wallet {
 }
 
 model MetalPrice {
-  id           String    @id @default(uuid())
-  metal        MetalType
-  pricePerGram Decimal   @db.Decimal(10, 4)
-  currency     String    @default("INR")
-  source       String    @default("external_api")
-  fetchedAt    DateTime  @default(now())
+  id              String    @id @default(cuid())
+  metal           MetalType
+  pricePerGramINR Float
+  pricePerOzUSD   Float
+  usdInrRate      Float
+  percentChange   Float
+  source          String
+  createdAt       DateTime  @default(now())
 
-  @@index([metal, fetchedAt])
+  @@index([metal, createdAt])
 }
 
 model Holding {

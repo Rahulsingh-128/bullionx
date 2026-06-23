@@ -2,14 +2,22 @@ import "dotenv/config";
 import express from "express";
 import cors from "cors";
 import routes from "./routes/index";
+import helmet from "helmet";
 import { errorHandler } from "./middleware/errorHandler";
-import { logger } from "./utils/logger";
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 
 // Middleware
-app.use(cors({ origin: process.env.CLIENT_URL, credentials: true }));
+app.use(helmet());
+app.use(
+  cors({
+    origin: process.env.CLIENT_URL,
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  }),
+);
 app.use(express.json());
 
 // Routes
