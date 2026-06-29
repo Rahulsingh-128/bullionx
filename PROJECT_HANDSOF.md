@@ -12,28 +12,33 @@ Architecture:
 
 Completed:
 ✅ Phase 0 Setup
+✅ Phase 1 Live Price Dashboard
 
 Current Phase:
-Phase 1 — Live Price Dashboard
+Phase 2 — Authentication
 
 Step Progress: 0/4
-  Step 1: Mock API + Types + Query Hooks  ← CURRENT (awaiting approval)
-  Step 2: Price Cards UI
-  Step 3: 7-day Chart (Recharts)
-  Step 4: Layout + Public Route wiring
+  Step 1: Types + authService + useAuth hook  ← CURRENT (awaiting approval)
+  Step 2: LoginForm + RegisterForm UI
+  Step 3: authStore (Zustand) + token handling
+  Step 4: ProtectedRoute / PublicRoute wiring + auto wallet creation
 
 API Contract (locked):
-  GET /api/prices/live → PriceLive[]
-  GET /api/prices/history?metal=GOLD&days=7 → PriceHistory
+  POST /api/auth/register → { user, token }
+  POST /api/auth/login → { user, token }
+  POST /api/auth/logout → { success }
+  GET  /api/auth/me → User
 
 Key Decisions:
 - Dark-first UI · Gold #D4AF37 · Silver #C0C0C0
-- Backend caches prices (1 min TTL), proxies external APIs
-- TanStack Query = server state · Zustand = client state
+- JWT stored in httpOnly cookie (preferred) — never localStorage for token
+- Axios interceptor (api.ts) attaches token automatically; no manual header setting in components
+- authStore (Zustand) holds only session/user state — no token value itself if httpOnly cookie is used
+- Auto wallet creation triggered server-side on successful register
+- TanStack Query = server state (auth/me) · Zustand = client state (session flags)
 - Mock via env flag in api.ts (no MSW)
-- 30s refetch interval owned by hook, not component
 
-Next Milestones: Phase 2 Auth → Phase 3 Buy → Phase 4 Portfolio → Phase 5 Transactions → Phase 6 Wallet → Phase 7 Sell → Phase 8 Polish → Phase 9 Testing → Phase 10 Deploy
+Next Milestones: Phase 3 Buy → Phase 4 Portfolio → Phase 5 Transactions → Phase 6 Wallet → Phase 7 Sell → Phase 8 Polish → Phase 9 Testing → Phase 10 Deploy
 
 ## 3. Project Structure — Frontend
 
